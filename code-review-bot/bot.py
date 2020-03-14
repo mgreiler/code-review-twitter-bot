@@ -6,6 +6,7 @@ import time
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
+
 class RetweetListener(tweepy.StreamListener):
     def __init__(self, api):
         self.api = api
@@ -137,7 +138,7 @@ def start_stream(tweets_listener, keywords, api):
             stream = tweepy.Stream(api.auth, tweets_listener)
             stream.filter(track=keywords, languages=["en"])
         except Exception as er:
-            logger.error("Error in start_stream occurred " + er)
+            logger.error("Error in start_stream occurred " + str(er))
             time.sleep(5)
             continue
 
