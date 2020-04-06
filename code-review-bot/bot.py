@@ -1,5 +1,8 @@
 import tweepy
 import logging
+
+from urllib3.exceptions import ReadTimeoutError
+
 from config import create_api
 import time
 
@@ -87,6 +90,10 @@ def contains_gaming_related_phrases(tweet_text):
             or "persona 5 royal" in tweet_text \
             or "doom eternal" in tweet_text \
             or "quantum manifestation code review" in tweet_text \
+            or "Doom 64 Remaster" in tweet_text \
+            or "Doom 64" in tweet_text \
+            or "streaming" in tweet_text \
+            or "resident evil 3" in tweet_text \
             or "deathstranding" in tweet_text:
         return True
     return False
@@ -103,7 +110,8 @@ def contains_marketing_related_phrases(tweet_text):
 
 
 def contains_ai_related_phrases(tweet_text):
-    if "DeepCode taps AI" in tweet_text:
+    if "DeepCode taps AI" in tweet_text \
+            or "DeepCode brings AI-powered code review to C and C++" in tweet_text:
         return True
     return False
 
@@ -133,14 +141,19 @@ def main(keywords):
 
 
 def start_stream(tweets_listener, keywords, api):
-    while True:
-        try:
-            stream = tweepy.Stream(api.auth, tweets_listener)
-            stream.filter(track=keywords, languages=["en"])
-        except Exception as er:
-            logger.error("Error in start_stream occurred " + str(er))
-            time.sleep(5)
-            continue
+    try:
+        stream = tweepy.Stream(api.auth, tweets_listener)
+        stream.filter(track=keywords, languages=["en"])
+    except ReadTimeoutError:
+        stream.disconnect()
+        logger.exception("ReadTimeoutError exception")
+        logger.exception("Restart the stream")
+        start_stream(tweets_listener, keywords, api)
+    except Exception:
+        stream.disconnect()
+        logger.exception("Fatal exception. Consult logs.")
+        start_stream(tweets_listener, keywords, api)
+
 
 
 if __name__ == "__main__":
