@@ -32,7 +32,8 @@ class RetweetListener(tweepy.StreamListener):
             except AttributeError:
                 tweet_phrase = tweet.retweeted_status.text
                 logger.info(
-                    "Error on accessing extended_tweet part of retweeted_tweet: " + str(tweet.retweeted_status.text),
+                    "Error on accessing extended_tweet part of retweeted_tweet: " +
+                    str(tweet.retweeted_status.text),
                     exc_info=True)
         else:
             try:
@@ -42,7 +43,8 @@ class RetweetListener(tweepy.StreamListener):
                     tweet_phrase = tweet.text
             except AttributeError:
                 tweet_phrase = tweet.text
-                logger.error("Error on accessing extended_tweet part of tweet: " + str(tweet.text), exc_info=True)
+                logger.error(
+                    "Error on accessing extended_tweet part of tweet: " + str(tweet.text), exc_info=True)
 
         tweet_phrase = tweet_phrase.lower()
 
@@ -51,7 +53,7 @@ class RetweetListener(tweepy.StreamListener):
                 logger.info(f"Tweet {tweet.id} retweeted ")
                 tweet.retweet()
             except Exception as e:
-                logger.error("Error on retweet", exc_info=False)
+                logger.error("Error on retweet" + str(e), exc_info=False)
 
     def on_error(self, status):
         logger.error(status)
@@ -64,13 +66,26 @@ class RetweetListener(tweepy.StreamListener):
 def contains_only_code_review_terms(tweet_text):
     if contains_ai_related_phrases(tweet_text) \
             or contains_gaming_related_phrases(tweet_text) \
-            or contains_marketing_related_phrases(tweet_text):
+            or contains_inappropriate_phrases(tweet_text) \
+            or contains_marketing_related_phrases(tweet_text) \
+            or contains_unrelated_phrases(tweet_text)\
+            or contains_conspiracy_phrases(tweet_text):
         return False
 
     if contains_code_review_phrase(tweet_text):
         return True
     return False
 
+
+def contains_tweets_that_come_up_too_often(tweet_text):
+    if ("amazon codeguru reviewer announces pull request dashboard " in tweet_text):
+        return True
+    return False
+
+def contains_unrelated_phrases(tweet_text):
+    if("highway code review" in tweet_text):
+        return True
+    return False
 
 def contains_gaming_related_phrases(tweet_text):
     if ("review code" in tweet_text and "game" in tweet_text) \
@@ -79,6 +94,7 @@ def contains_gaming_related_phrases(tweet_text):
             or ("review code" in tweet_text and "playing" in tweet_text) \
             or ("receiving a review code" in tweet_text) \
             or ("coupon" in tweet_text) \
+            or ("maker switch" in tweet_text) \
             or "review the code of" in tweet_text \
             or "death stranding" in tweet_text \
             or "apply for review code" in tweet_text \
@@ -90,11 +106,31 @@ def contains_gaming_related_phrases(tweet_text):
             or "persona 5 royal" in tweet_text \
             or "doom eternal" in tweet_text \
             or "quantum manifestation code review" in tweet_text \
-            or "Doom 64 Remaster" in tweet_text \
-            or "Doom 64" in tweet_text \
+            or "doom 64 remaster" in tweet_text \
+            or "doom 64" in tweet_text \
             or "streaming" in tweet_text \
             or "resident evil 3" in tweet_text \
+            or "final fantasy 7" in tweet_text \
+            or "fantasy vii remake" in tweet_text \
             or "deathstranding" in tweet_text:
+        return True
+    return False
+
+
+def contains_conspiracy_phrases(tweet_text):
+    if ("https://lockdownsceptics.org/code-review-of-fergusons-model/" in tweet_text) \
+            or "ferguson" in tweet_text \
+            or "lockdown sceptics" in tweet_text \
+            or "imperial college model" in tweet_text \
+            or "covid" in tweet_text \
+            or "corona" in tweet_text \
+            or "lockdownsceptics" in tweet_text:
+        return True
+    return False
+
+
+def contains_inappropriate_phrases(tweet_text):
+    if "sex" in tweet_text:
         return True
     return False
 
@@ -104,14 +140,15 @@ def contains_marketing_related_phrases(tweet_text):
             or "discount" in tweet_text \
             or "referral code" in tweet_text \
             or "promo code" in tweet_text \
-            or "Kibo Code Review" in tweet_text:
+            or "medici code review" in tweet_text \
+            or "kibo code review" in tweet_text:
         return True
     return False
 
 
 def contains_ai_related_phrases(tweet_text):
-    if "DeepCode taps AI" in tweet_text \
-            or "DeepCode brings AI-powered code review to C and C++" in tweet_text:
+    if "deepcode taps ai" in tweet_text \
+            or "deepcode brings ai-powered code review to c and c++" in tweet_text:
         return True
     return False
 
@@ -153,7 +190,6 @@ def start_stream(tweets_listener, keywords, api):
         stream.disconnect()
         logger.exception("Fatal exception. Consult logs.")
         start_stream(tweets_listener, keywords, api)
-
 
 
 if __name__ == "__main__":
