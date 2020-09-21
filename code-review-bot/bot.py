@@ -84,6 +84,7 @@ def contains_tweets_that_come_up_too_often(tweet_text):
 
 def contains_unrelated_phrases(tweet_text):
     if("highway code review" in tweet_text) \
+            or ("oracle hosting tiktok us data" in tweet_text) \
             or ("$YFMS code review" in tweet_text):
         return True
     return False
