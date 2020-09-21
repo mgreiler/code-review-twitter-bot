@@ -83,7 +83,8 @@ def contains_tweets_that_come_up_too_often(tweet_text):
     return False
 
 def contains_unrelated_phrases(tweet_text):
-    if("highway code review" in tweet_text):
+    if("highway code review" in tweet_text) \
+            or ("$YFMS code review" in tweet_text):
         return True
     return False
 
@@ -112,6 +113,7 @@ def contains_gaming_related_phrases(tweet_text):
             or "resident evil 3" in tweet_text \
             or "final fantasy 7" in tweet_text \
             or "fantasy vii remake" in tweet_text \
+            or "Super Mario" in tweet_text \
             or "deathstranding" in tweet_text:
         return True
     return False
