@@ -164,6 +164,7 @@ def contains_code_review_phrase(tweet_text):
             or "review the code" in tweet_text \
             or "review your code" in tweet_text \
             or "review someone's code" in tweet_text \
+            or "review his code" in tweet_text \
             or " pr for review" in tweet_text \
             or (" pr review " in tweet_text) \
             or ("pull request" in tweet_text and "review" in tweet_text) \
