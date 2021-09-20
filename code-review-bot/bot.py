@@ -2,10 +2,7 @@ import tweepy
 import logging
 
 from urllib3.exceptions import ReadTimeoutError
-
 from config import create_api
-import time
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
@@ -22,7 +19,6 @@ class RetweetListener(tweepy.StreamListener):
             return
 
         # let's check for exact matching of our track phrase
-        tweet_phrase = ""
         if hasattr(tweet, "retweeted_status"):  # Check if Retweet
             try:
                 if hasattr(tweet.retweeted_status, 'extended_tweet'):
@@ -68,7 +64,7 @@ def contains_only_code_review_terms(tweet_text):
             or contains_gaming_related_phrases(tweet_text) \
             or contains_inappropriate_phrases(tweet_text) \
             or contains_marketing_related_phrases(tweet_text) \
-            or contains_unrelated_phrases(tweet_text)\
+            or contains_unrelated_phrases(tweet_text) \
             or contains_conspiracy_phrases(tweet_text):
         return False
 
@@ -78,15 +74,21 @@ def contains_only_code_review_terms(tweet_text):
 
 
 def contains_tweets_that_come_up_too_often(tweet_text):
-    if ("amazon codeguru reviewer announces pull request dashboard " in tweet_text):
+    if ("amazon codeguru reviewer announces pull request dashboard " in tweet_text) \
+                or ("even better code review in gitHub for mobile:" in tweet_text):
         return True
     return False
 
+
 def contains_unrelated_phrases(tweet_text):
-    if("highway code review" in tweet_text) \
-            or ("$YFMS code review" in tweet_text):
+    if ("highway code review" in tweet_text) \
+            or ("oracle hosting tiktok us data" in tweet_text) \
+            or ("$yfms code review" in tweet_text) \
+            or ("bitcoin" in tweet_text)\
+            or ("BioEnergy" in tweet_text):
         return True
     return False
+
 
 def contains_gaming_related_phrases(tweet_text):
     if ("review code" in tweet_text and "game" in tweet_text) \
@@ -126,7 +128,8 @@ def contains_conspiracy_phrases(tweet_text):
             or "imperial college model" in tweet_text \
             or "covid" in tweet_text \
             or "corona" in tweet_text \
-            or "lockdownsceptics" in tweet_text:
+            or "lockdownsceptics" in tweet_text\
+            or "crypto" in tweet_text:
         return True
     return False
 
