@@ -1,4 +1,44 @@
 
+gaming_related_phrases = [
+    "game"
+    "nintendo"
+    "playstation",
+    "playing",
+    "receiving a review code",
+    "coupon",
+    "maker switch",
+    "review the code of",
+    "death stranding",
+    "apply freview code",
+    "need that review code",
+    "need a review code",
+    "request that review code",
+    "request a review code",
+    "the lost code review",
+    "persona 5 royal",
+    "doom eternal",
+    "quantum manifestation code review",
+    "doom 64 remaster",
+    "doom 64",
+    "streaming",
+    "resident evil 3",
+    "final fantasy 7",
+    "fantasy vii remake",
+    "Super Mario",
+    "deathstranding",
+    "kena bridge",
+    "sega",
+    "emberlab"
+]
+
+
+def contains_gaming_related_phrases(tweet_text):
+    for phrase in gaming_related_phrases:
+        if phrase in tweet_text:
+            return True
+        return False
+
+
 def contains_tweets_that_come_up_too_often(tweet_text):
     if ("amazon codeguru reviewer announces pull request dashboard " in tweet_text) \
             or ("Code Review from the Command Line" in tweet_text) \
@@ -11,42 +51,8 @@ def contains_unrelated_phrases(tweet_text):
     if ("highway code review" in tweet_text) \
             or ("oracle hosting tiktok us data" in tweet_text) \
             or ("$yfms code review" in tweet_text) \
-            or ("bitcoin" in tweet_text)\
+            or ("bitcoin" in tweet_text) \
             or ("BioEnergy" in tweet_text):
-        return True
-    return False
-
-
-def contains_gaming_related_phrases(tweet_text):
-    if ("review code" in tweet_text and "game" in tweet_text) \
-            or ("review code" in tweet_text and "nintendo" in tweet_text) \
-            or ("review code" in tweet_text and "playstation" in tweet_text) \
-            or ("review code" in tweet_text and "playing" in tweet_text) \
-            or ("receiving a review code" in tweet_text) \
-            or ("coupon" in tweet_text) \
-            or ("maker switch" in tweet_text) \
-            or "review the code of" in tweet_text \
-            or "death stranding" in tweet_text \
-            or "apply for review code" in tweet_text \
-            or "need that review code" in tweet_text \
-            or "need a review code" in tweet_text \
-            or "request that review code" in tweet_text \
-            or "request a review code" in tweet_text \
-            or "the lost code review" in tweet_text \
-            or "persona 5 royal" in tweet_text \
-            or "doom eternal" in tweet_text \
-            or "quantum manifestation code review" in tweet_text \
-            or "doom 64 remaster" in tweet_text \
-            or "doom 64" in tweet_text \
-            or "streaming" in tweet_text \
-            or "resident evil 3" in tweet_text \
-            or "final fantasy 7" in tweet_text \
-            or "fantasy vii remake" in tweet_text \
-            or "Super Mario" in tweet_text \
-            or "deathstranding" in tweet_text \
-            or "kena bridge" in tweet_text \
-            or "sega" in tweet_text \
-            or "emberlab" in tweet_text:
         return True
     return False
 
@@ -58,7 +64,7 @@ def contains_conspiracy_phrases(tweet_text):
             or "imperial college model" in tweet_text \
             or "covid" in tweet_text \
             or "corona" in tweet_text \
-            or "lockdownsceptics" in tweet_text\
+            or "lockdownsceptics" in tweet_text \
             or "crypto" in tweet_text:
         return True
     return False
