@@ -1,9 +1,8 @@
-import tweepy
 import logging
-
+from urllib3.exceptions import ReadTimeoutError
+import tweepy
 import matching_rules
 
-from urllib3.exceptions import ReadTimeoutError
 from config import create_api
 
 logging.basicConfig(level=logging.INFO)
