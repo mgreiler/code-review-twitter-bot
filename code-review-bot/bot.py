@@ -81,21 +81,6 @@ class RetweetListener(tweepy.StreamListener):
             return False
 
 
-# def start_stream(tweets_listener, keywords, api):
-#     try:
-#         stream = tweepy.Stream(api.auth, tweets_listener)
-#         stream.filter(track=keywords, languages=["en"])
-#     except ReadTimeoutError:
-#         stream.disconnect()
-#         logger.exception("ReadTimeoutError exception")
-#         logger.exception("Restart the stream")
-#         start_stream(tweets_listener, keywords, api)
-#     except Exception:
-#         stream.disconnect()
-#         logger.exception("Fatal exception. Consult logs.")
-#         start_stream(tweets_listener, keywords, api)
-
-
 def main(keywords):
     api = create_api()
     tweets_listener = RetweetListener(api)
