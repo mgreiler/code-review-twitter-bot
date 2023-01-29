@@ -52,7 +52,7 @@ class RetweetListener(tweepy.StreamListener):
         if tweet.id in self.timeline:
             # check if we already retweeted or tweeted this tweet. If let's skip it.
             print("Tweet already on timeline")
-            logger.info(f"Tweet ALREADY on Timeline")
+            logger.info("Tweet ALREADY on Timeline")
             return
 
         # Check if this tweet is a reply or it's the author so, it should be ignored
@@ -68,7 +68,7 @@ class RetweetListener(tweepy.StreamListener):
         if matching_rules.contains_only_allowed_code_review_phrases(tweet_text):
             try:
                 logger.info("Tweet %s retweeted ",tweet.id)
-                print(f"Tweet {tweet.id} retweeted ")
+                print("Tweet %s retweeted ", tweet.id)
                 tweet.retweet()
             except Exception as e:
                 logger.error("Error on retweet %s", str(e), exc_info=False)
@@ -101,18 +101,18 @@ def start_stream(tweets_listener, keywords, api, max_retries=5, retry_count=0):
             sleep(sleep_time)
         except ReadTimeoutError:
             stream.disconnect()
-            logger.exception("ReadTimeoutError exception")
+            logger.exception("ReadTimeoutError exception: %s", str(e))
             return
-        except Exception:
+        except ConnectionError as e:
             stream.disconnect()
-            logger.exception("Fatal exception. Consult logs.")
+            logger.exception("Connection error: %s", str(e))
 
         if retry_count >= max_retries:
             logger.exception("Max retries reached. Aborting.")
             return
-        else:
-            logger.exception("Restarting the stream")
-            start_stream(tweets_listener, keywords, api, max_retries, retry_count + 1)
+
+        logger.exception("Restarting the stream")
+        start_stream(tweets_listener, keywords, api, max_retries, retry_count + 1)
 
 
 if __name__ == "__main__":
