@@ -22,7 +22,7 @@ def get_tweet_fulltexr(tweet):
             tweet_phrase = tweet.retweeted_status.text
             print("Error accessing extended_tweet of retweet")
             logger.info(
-                "Error on accessing extended_tweet part of retweeted_tweet: " +
+                "Error on accessing extended_tweet part of retweeted_tweet: %s",
                 str(tweet.retweeted_status.text),
                 exc_info=True)
     else:
@@ -35,7 +35,7 @@ def get_tweet_fulltexr(tweet):
             tweet_phrase = tweet.text
             print("Error accessing extended_tweet of tweet")
             logger.error(
-                "Error on accessing extended_tweet part of tweet: " + str(tweet.text), exc_info=True)
+                "Error on accessing extended_tweet part of tweet: %s", str(tweet.text), exc_info=True)
 
     return tweet_phrase
 
@@ -67,11 +67,11 @@ class RetweetListener(tweepy.StreamListener):
 
         if matching_rules.contains_only_allowed_code_review_phrases(tweet_text):
             try:
-                logger.info(f"Tweet {tweet.id} retweeted ")
+                logger.info("Tweet %s retweeted ",tweet.id)
                 print(f"Tweet {tweet.id} retweeted ")
                 tweet.retweet()
             except Exception as e:
-                logger.error("Error on retweet" + str(e), exc_info=False)
+                logger.error("Error on retweet %s", str(e), exc_info=False)
 
     def on_error(self, status):
         logger.error(status)
