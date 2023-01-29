@@ -1,9 +1,10 @@
 import logging
-from urllib3.exceptions import ReadTimeoutError
-import tweepy
 from time import sleep
+
 import matching_rules
+import tweepy
 from config import create_api
+from urllib3.exceptions import ReadTimeoutError
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
