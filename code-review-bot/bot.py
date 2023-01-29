@@ -1,9 +1,8 @@
 import logging
 from urllib3.exceptions import ReadTimeoutError
 import tweepy
-import matching_rules
 from time import sleep
-
+import matching_rules
 from config import create_api
 
 logging.basicConfig(level=logging.INFO)
@@ -45,7 +44,8 @@ class RetweetListener(tweepy.StreamListener):
     def __init__(self, api):
         self.api = api
         self.me = api.me()
-        self.timeline = set([tweet.id for tweet in api.user_timeline()])
+        # get the timeline, and transform this into a set of tweet-ids
+        self.timeline = {tweet.id for tweet in api.user_timeline()}
 
     def on_status(self, tweet):
 
@@ -99,7 +99,7 @@ def start_stream(tweets_listener, keywords, api, max_retries=5, retry_count=0):
         except tweepy.RateLimitError:
             logger.exception("Rate limit reached. Sleeping for %d seconds", sleep_time)
             sleep(sleep_time)
-        except ReadTimeoutError:
+        except ReadTimeoutError as e:
             stream.disconnect()
             logger.exception("ReadTimeoutError exception: %s", str(e))
             return
@@ -117,6 +117,6 @@ def start_stream(tweets_listener, keywords, api, max_retries=5, retry_count=0):
 
 if __name__ == "__main__":
     # main(["python"])
-    keywords = ["code review", "code reviews", "#codereviews", "codereviews", "reviewing code", "PR review",
+    code_review_keywords = ["code review", "code reviews", "#codereviews", "codereviews", "reviewing code", "PR review",
                 "pull request", "merge request"]
-    main(keywords)
+    main(code_review_keywords)
