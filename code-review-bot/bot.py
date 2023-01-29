@@ -1,10 +1,14 @@
+# The standard order of imports in Python is to put standard library imports first, followed by third-party library
+# imports, and then any local imports.
 import logging
 from time import sleep
+from urllib3.exceptions import ReadTimeoutError
+
+import tweepy
 
 import matching_rules
-import tweepy
 from config import create_api
-from urllib3.exceptions import ReadTimeoutError
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
