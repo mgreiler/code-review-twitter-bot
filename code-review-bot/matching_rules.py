@@ -1,6 +1,24 @@
-gaming_related_phrases = [
-    "game"
-    "nintendo"
+def contains_only_allowed_code_review_phrases(tweet_text):
+    tweet_text = tweet_text.lower()
+
+    unwanted_phrases_to_check = [unrelated_phrases, ai_related_phrases, gaming_related_phrases, inappropriate_phrases,
+                                 marketing_related_phrases, conspiracy_phrases, noisy_phrases]
+
+    for phrase_set in unwanted_phrases_to_check:
+        if contains_phrases(tweet_text, phrase_set):
+            return False
+    if contains_phrases(tweet_text, code_review_phrases):
+        return True
+    return False
+
+
+def contains_phrases(tweet_text, phrases):
+    return bool(phrases.intersection(set(tweet_text.split())))
+
+
+gaming_related_phrases = set(map(str.lower, {
+    "game",
+    "nintendo",
     "playstation",
     "playing",
     "receiving a review code",
@@ -28,35 +46,17 @@ gaming_related_phrases = [
     "kena bridge",
     "sega",
     "emberlab"
-]
+}))
 
+noisy_phrases = set(map(str.lower, {"amazon codeguru reviewer announces pull request dashboard ",
+                                    "Code Review from the Command Line",
+                                    "even better code review in gitHub for mobile:"}))
 
-def contains_gaming_related_phrases(tweet_text):
-    for phrase in gaming_related_phrases:
-        if phrase in tweet_text:
-            return True
-    return False
+unrelated_phrases = set(map(str.lower,
+                            {"highway code review", "oracle hosting tiktok us data", "$yfms code review", "bitcoin",
+                             "BioEnergy"}))
 
-
-def contains_tweets_that_come_up_too_often(tweet_text):
-    if ("amazon codeguru reviewer announces pull request dashboard " in tweet_text) \
-            or ("Code Review from the Command Line" in tweet_text) \
-            or ("even better code review in gitHub for mobile:" in tweet_text):
-        return True
-    return False
-
-
-def contains_unrelated_phrases(tweet_text):
-    if ("highway code review" in tweet_text) \
-            or ("oracle hosting tiktok us data" in tweet_text) \
-            or ("$yfms code review" in tweet_text) \
-            or ("bitcoin" in tweet_text) \
-            or ("BioEnergy" in tweet_text):
-        return True
-    return False
-
-
-conspiracy_phrases = [
+conspiracy_phrases = set(map(str.lower, {
     "https://lockdownsceptics.g/code-review-of-fergusons-model/",
     "ferguson",
     "lockdown sceptics",
@@ -65,47 +65,22 @@ conspiracy_phrases = [
     "cona",
     "lockdownsceptics",
     "crypto"
-]
+}))
 
-
-def contains_conspiracy_phrases(tweet_text):
-    for phrase in conspiracy_phrases:
-        if phrase in tweet_text:
-            return True
-    return False
-
-
-def contains_inappropriate_phrases(tweet_text):
-    if "sex" in tweet_text:
-        return True
-    return False
-
-
-marketing_related_phrases = [
+marketing_related_phrases = set(map(str.lower, {
     "product review"
     "discount",
     "referral code",
     "promo code",
     "medici code review",
     "kibo code review"
-]
+}))
 
+ai_related_phrases = set(map(str.lower, {"deepcode taps ai", "deepcode brings ai-powered code review to c and c++"}))
 
-def contains_marketing_related_phrases(tweet_text):
-    for phrase in marketing_related_phrases:
-        if phrase in tweet_text:
-            return True
-    return False
+inappropriate_phrases = set(map(str.lower, {"sex", "penis", "boobs", "vagina"}))
 
-
-def contains_ai_related_phrases(tweet_text):
-    if "deepcode taps ai" in tweet_text \
-            or "deepcode brings ai-powered code review to c and c++" in tweet_text:
-        return True
-    return False
-
-
-code_review_phrases = [
+code_review_phrases = set(map(str.lower, {
     "code review",
     "reviewing code",
     "codereview",
@@ -118,11 +93,4 @@ code_review_phrases = [
     " pr review ",
     "pull request",
     "merge request"
-]
-
-
-def contains_code_review_phrase(tweet_text):
-    for phrase in code_review_phrases:
-        if phrase in tweet_text:
-            return True
-    return False
+}))
